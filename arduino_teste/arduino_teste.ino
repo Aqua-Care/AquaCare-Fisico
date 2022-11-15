@@ -17,11 +17,6 @@ void setup() {
   
 void loop() {
   // put your main code here, to run repeatedly:
-
-  int valorSensor = digitalRead(sensor);
-  arduinoMaster.varWireWrite(0, highByte(valorSensor));
-  arduinoMaster.varWireWrite(1, lowByte(valorSensor));
-  Serial.println(valorSensor);
 }
 
 void receberDados() {
