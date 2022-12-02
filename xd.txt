@@ -1,0 +1,1 @@
+https://douglasgaspar.wordpress.com/2021/04/23/utilizando-esp8266-nodemcu-com-realtime-database-do-firebase/
