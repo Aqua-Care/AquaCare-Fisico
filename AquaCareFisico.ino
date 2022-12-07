@@ -110,6 +110,7 @@ void setup(void)
 
 
   myservo.attach(D1);//servo
+  myservo.write(0);
   pinMode(relay1, OUTPUT);//relé
 
 //ds18b20
@@ -155,7 +156,7 @@ void printTemperature(DeviceAddress deviceAddress)
   temp = tempC;
   Serial.print("Temp C: ");
   Serial.print(tempC);
-  Serial.print("Temp F: ");
+  Serial.print(" Temp F: ");
   Serial.println(DallasTemperature::toFahrenheit(tempC)); // Converts tempC to Fahrenheit
 }
  
@@ -171,10 +172,8 @@ void loop(void)
 
     Serial.printf("Valor Luz... %s\n", Firebase.RTDB.getInt(&fbdo, F("/Aquario/Luz/LED")) ? luz = String(fbdo.to<int>()).c_str() : fbdo.errorReason().c_str());
     Serial.printf("Valor Racao... %s\n", Firebase.RTDB.getInt(&fbdo, F("/Aquario/Racao/Alimentar")) ? rac = String(fbdo.to<int>()).c_str() : fbdo.errorReason().c_str());
-    Serial.printf("Valor Temperatura... %s\n", Firebase.RTDB.setString(&fbdo, F("/Aquario/Agua/Temperatura"), F("")) ? "ok" : fbdo.errorReason().c_str());
+    Serial.printf("Valor Temperatura... %s\n", Firebase.RTDB.setString(&fbdo, F("/Aquario/Agua/Temperatura"), temp) ? "ok" : fbdo.errorReason().c_str());
     Serial.printf("O valor da temperatura... %s\n", Firebase.RTDB.getString(&fbdo, F("/Aquario/Agua/Temperatura")) ? fbdo.to<const char *>() : fbdo.errorReason().c_str());
-
-    Serial.println(temp);
 
 
 //luz
@@ -186,18 +185,24 @@ void loop(void)
 
 //alimentação
      if (rac == "1"){
-      int pos;
+                           // waits 15ms for the servo to reach the position
+      myservo.write(90);
+      delay(1000);
+      myservo.write(0);
+      delay(1000);
 
-      for (pos = 0; pos <= 180; pos += 1) { // goes from 0 degrees to 180 degrees
+
+  /*int pos;
+
+  for (pos = 0; pos <= 180; pos += 1) { // goes from 0 degrees to 180 degrees
     // in steps of 1 degree
-      myservo.write(pos);              // tell servo to go to position in variable 'pos'
-      delay(15);                       // waits 15ms for the servo to reach the position
-      }
-      for (pos = 180; pos >= 0; pos -= 1) { // goes from 180 degrees to 0 degrees
-      myservo.write(pos);              // tell servo to go to position in variable 'pos'
-      delay(15);                       // waits 15ms for the servo to reach the position
-      }
-      
+    myservo.write(pos);              // tell servo to go to position in variable 'pos'
+    delay(15);                       // waits 15ms for the servo to reach the position
+  }
+  for (pos = 180; pos >= 0; pos -= 1) { // goes from 180 degrees to 0 degrees
+    myservo.write(pos);              // tell servo to go to position in variable 'pos'
+    delay(15);                       // waits 15ms for the servo to reach the position
+  }*/
       }
 
 //temperatura
